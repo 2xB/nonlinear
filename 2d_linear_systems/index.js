@@ -1,0 +1,337 @@
+onload = function() {
+    var canvas = document.getElementById('canvas');
+    var ctx = canvas.getContext('2d');
+    
+    canvas.bgcanvas = document.createElement('canvas'); // Backdrop | Grid
+    bgctx = canvas.bgcanvas.getContext('2d');
+
+    canvas.contentcanvas = document.createElement('canvas'); // Faded | Lines
+    contentctx = canvas.contentcanvas.getContext('2d');
+    
+    canvas.fgcanvas = document.createElement('canvas'); // Foreground | Axes, Dots, Annotations
+    fgctx = canvas.fgcanvas.getContext('2d');
+    
+    canvas.tmpcanvas = document.createElement('canvas');
+    tmpctx = canvas.tmpcanvas.getContext('2d');
+    
+    var spacing = 50;
+    var A = [[spacing,0],[0,spacing]];
+    
+    var lines = [];
+    
+    var timeResolution = 0.1;
+    var timeScaleFactor = 0.00001;
+    var maxTime = 3000;
+    
+    var lineCount = 400;
+    var activePoint = 1;
+
+    let lastTime;
+    
+    let stepMod = 0;
+    
+    function xValToPos(x) {
+        return x + canvas.width/2;
+    }
+
+    function yValToPos(y) {
+        return y + canvas.height/2;
+    }
+    
+    function compose()  {
+        tmpctx.clearRect(0, 0, canvas.width, canvas.height);
+        tmpctx.drawImage(canvas.contentcanvas, 0, 0);
+        tmpctx.fillStyle = '#77f';
+        tmpctx.globalCompositeOperation = "multiply";
+        tmpctx.fillRect(0, 0, canvas.width, canvas.height);
+        tmpctx.globalCompositeOperation = "source-over";
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle   = '#fff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.globalCompositeOperation = "difference";
+        ctx.drawImage(canvas.contentcanvas, 0, 0);
+        ctx.globalCompositeOperation = "multiply";
+        ctx.drawImage(canvas.bgcanvas, 0, 0);
+        ctx.globalCompositeOperation = "lighter";
+        ctx.drawImage(canvas.tmpcanvas, 0, 0);
+        ctx.globalCompositeOperation = "source-over";
+        ctx.drawImage(canvas.fgcanvas, 0, 0);
+    }
+
+    function draw() {
+
+        bgctx.fillStyle   = '#000';
+        bgctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        fgctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        
+        // Grid
+        {
+            bgctx.lineWidth = 1;
+            bgctx.strokeStyle = '#333';
+            bgctx.fillStyle   = '#333';
+            
+            // Horizontal grid
+            
+            var currentValue = spacing;
+            
+            while(currentValue < canvas.height/2) {
+                bgctx.beginPath();
+                bgctx.moveTo(0, canvas.height/2+currentValue);
+                bgctx.lineTo(canvas.width, canvas.height/2+currentValue);
+                bgctx.moveTo(0, canvas.height/2-currentValue);
+                bgctx.lineTo(canvas.width, canvas.height/2-currentValue);
+                bgctx.closePath();
+                bgctx.stroke();
+                
+                currentValue += spacing;
+            }
+            
+            // Vertical grid
+            
+            currentValue = spacing;
+            
+            while(currentValue < canvas.width/2) {
+                bgctx.beginPath();
+                bgctx.moveTo(canvas.width/2+currentValue, 0);
+                bgctx.lineTo(canvas.width/2+currentValue, canvas.height);
+                bgctx.moveTo(canvas.width/2-currentValue, 0);
+                bgctx.lineTo(canvas.width/2-currentValue, canvas.height);
+                bgctx.closePath();
+                bgctx.stroke();
+                
+                currentValue += spacing;
+            }
+        }
+        
+        
+        // Axes
+        {
+            var arrowSize = 10;
+
+            fgctx.lineWidth = 1;
+            fgctx.strokeStyle = '#aaa';
+            fgctx.fillStyle   = '#aaa';
+
+            // x axis
+            fgctx.beginPath();
+            fgctx.moveTo(0, canvas.height/2);
+            fgctx.lineTo(canvas.width, canvas.height/2);
+            fgctx.lineTo(canvas.width-1.5*arrowSize, canvas.height/2-arrowSize);
+            fgctx.lineTo(canvas.width-1.5*arrowSize, canvas.height/2+arrowSize);
+            fgctx.lineTo(canvas.width, canvas.height/2);
+            fgctx.closePath();
+            fgctx.stroke();
+            fgctx.fill();
+            
+            fgctx.fillStyle = '#eee';
+            fgctx.font = "30px serif";
+            fgctx.fillText("x",canvas.width - 50, canvas.height/2+30);
+            fgctx.font = "15px serif";
+            fgctx.fillText("1",canvas.width - 32, canvas.height/2+35);
+
+
+            fgctx.lineWidth = 1;
+            fgctx.strokeStyle = '#aaa';
+            fgctx.fillStyle   = '#aaa';
+            
+            // y axis
+            fgctx.beginPath();
+            fgctx.moveTo(canvas.width/2, canvas.height);
+            fgctx.lineTo(canvas.width/2, 0);
+            fgctx.lineTo(canvas.width/2-arrowSize, 1.5*arrowSize);
+            fgctx.lineTo(canvas.width/2+arrowSize, 1.5*arrowSize);
+            fgctx.lineTo(canvas.width/2, 0);
+            fgctx.closePath();
+            fgctx.stroke();
+            fgctx.fill();
+            
+            fgctx.fillStyle = '#eee';
+            fgctx.font = "30px serif";
+            fgctx.fillText("x",canvas.width/2 - 40, 30);
+            fgctx.font = "15px serif";
+            fgctx.fillText("2",canvas.width/2 - 22, 35);
+        }
+        
+        // Points
+        
+        var point1Color = '#77f';
+        var point2Color = '#f77';
+        {
+            var pointSize = 7;
+            
+            var x = A[0][0];
+            var y = A[0][1];
+            
+            fgctx.beginPath();
+            fgctx.lineWidth = 1;
+            fgctx.strokeStyle = point1Color;
+            fgctx.fillStyle   = point1Color;
+            fgctx.arc(x+canvas.width/2, canvas.height/2-y, pointSize, 0, Math.PI * 2, true);
+            fgctx.closePath();
+            fgctx.fill();
+            
+            
+            var x = A[1][0];
+            var y = A[1][1];
+            
+            fgctx.beginPath();
+            fgctx.lineWidth = 1;
+            fgctx.strokeStyle = point2Color;
+            fgctx.fillStyle   = point2Color;
+            fgctx.arc(x+canvas.width/2, canvas.height/2-y, pointSize, 0, Math.PI * 2, true);
+            fgctx.closePath();
+            fgctx.fill();
+        }
+        
+        // Matrix
+        fgctx.fillStyle = '#eee';
+        fgctx.font = "30px serif";
+        fgctx.fillText("A =",canvas.width - 200, 50);
+        fgctx.font = "60px serif";
+        fgctx.fillText("[",canvas.width - 140, 60);
+        fgctx.fillText("]",canvas.width -  35, 60);
+        fgctx.font = "15px serif";
+        fgctx.fillStyle   = point1Color;
+        fgctx.fillText(A[0][0]/spacing,canvas.width - 120, 35);
+        fgctx.fillText(A[0][1]/spacing,canvas.width - 120, 60);
+        fgctx.fillStyle   = point2Color;
+        fgctx.fillText(A[1][0]/spacing,canvas.width - 70, 35);
+        fgctx.fillText(A[1][1]/spacing,canvas.width - 70, 60);
+        
+        compose();
+    }
+    
+    function step(timestamp) {
+        if (lastTime === undefined)
+            lastTime = timestamp;
+        const elapsed = timestamp - lastTime;
+        
+        lastTime = timestamp;
+        
+        // Fade
+        contentctx.globalCompositeOperation = "difference";
+        contentctx.fillStyle   = '#020202';
+        contentctx.fillRect(0, 0, canvas.width, canvas.height);
+        contentctx.globalCompositeOperation = "source-over";
+
+        // Draw lines
+        contentctx.lineWidth = 1;
+        contentctx.strokeStyle = '#fff';
+        //contentctx.strokeStyle = '#44c';
+        
+        var toDelete = [];
+        for (let i in lines) {
+            var line = lines[i];
+            contentctx.beginPath();
+            contentctx.moveTo(canvas.width/2 + line["x"], canvas.height/2 + line["y"]);
+            
+            var desiredSteps = Math.floor((timestamp - line["start"]) / timeResolution);
+            while (line["currentSteps"] < desiredSteps) {
+                line["currentSteps"] += 1;
+                var dxdt = A[0][0]*line["x"] + A[1][0]*line["y"];
+                var dydt = A[0][1]*line["x"] + A[1][1]*line["y"];
+                
+                line["x"] += dxdt*timeResolution*timeScaleFactor;
+                line["y"] += dydt*timeResolution*timeScaleFactor;
+            }
+            
+            contentctx.lineTo(canvas.width/2 + line["x"], canvas.height/2 + line["y"]);
+            contentctx.closePath();
+            contentctx.stroke();
+            
+            if (line["x"] < - canvas.width/2 || line["x"] > canvas.width/2 || line["y"] < - canvas.height/2 || line["y"] > canvas.height/2) {
+                toDelete.push(line);
+            }
+            else if (timestamp - line["start"] > maxTime) {
+                toDelete.push(line);
+            }
+            
+        }
+        
+        for (let i in toDelete) {
+            var line = toDelete[i];
+            const index = lines.indexOf(line);
+            if (index > -1) {
+                lines.splice(index, 1);
+            }
+        }
+        
+        // Add lines
+        while (lines.length < lineCount) {
+            lines.push({
+                "start": timestamp,
+                "currentSteps": 0,
+                "x": (Math.random()-0.5) * canvas.width,
+                "y": (Math.random()-0.5) * canvas.height
+            })
+        }
+        
+        compose();
+        
+        window.requestAnimationFrame(step);
+    }
+    
+    function onDrag(evt) {
+        var x = evt.layerX - canvas.width/2;
+        var y = -(evt.layerY - canvas.height/2);
+        
+        if (activePoint == 1) {
+            A[0][0] = x;
+            A[0][1] = y;
+        }
+        else {
+            A[1][0] = x;
+            A[1][1] = y;
+        }
+        draw();
+    }
+    
+    canvas.addEventListener("mousedown", function(evt){
+        var x = evt.layerX - canvas.width/2;
+        var y = -(evt.layerY - canvas.height/2);
+        
+        var dist1squared = (x - A[0][0])**2 + (y - A[0][1])**2;
+        var dist2squared = (x - A[1][0])**2 + (y - A[1][1])**2;
+        if (dist1squared < dist2squared) {
+            activePoint = 1;
+        }
+        else {
+            activePoint = 2;
+        }
+        canvas.onmousemove = onDrag;
+    });
+
+    canvas.addEventListener("mouseup", function(e){
+        canvas.onmousemove = null;
+    });
+
+    
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        canvas.bgcanvas.width = canvas.width;
+        canvas.bgcanvas.height = canvas.height;
+        
+        canvas.contentcanvas.width = canvas.width;
+        canvas.contentcanvas.height = canvas.height;
+        
+        canvas.fgcanvas.width = canvas.width;
+        canvas.fgcanvas.height = canvas.height;
+        
+        canvas.tmpcanvas.width = canvas.width;
+        canvas.tmpcanvas.height = canvas.height;
+        
+        lines = [];
+        
+        draw();
+        ctx.drawImage(canvas.bgcanvas, 0, 0);
+    }
+
+    window.addEventListener('resize', resizeCanvas, false);
+    resizeCanvas();
+    window.requestAnimationFrame(step);
+}
