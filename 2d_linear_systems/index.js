@@ -274,9 +274,9 @@ onload = function() {
         window.requestAnimationFrame(step);
     }
     
-    function onDrag(evt) {
-        var x = evt.layerX - canvas.width/2;
-        var y = -(evt.layerY - canvas.height/2);
+    function onDrag(clientX, clientY) {
+        var x = clientX - canvas.width/2;
+        var y = -(clientY - canvas.height/2);
         
         if (activePoint == 1) {
             A[0][0] = x;
@@ -289,9 +289,17 @@ onload = function() {
         draw();
     }
     
-    canvas.addEventListener("mousedown", function(evt){
-        var x = evt.layerX - canvas.width/2;
-        var y = -(evt.layerY - canvas.height/2);
+    function onMouseMove(evt) {
+        return onDrag(evt.clientX, evt.clientY);
+    }
+    
+    function onTouchMove(evt) {
+        return onDrag(evt.touches[0].clientX, evt.touches[0].clientY);
+    }
+    
+    function onMouseDown(clientX, clientY) {
+        var x = clientX - canvas.width/2;
+        var y = -(clientY - canvas.height/2);
         
         var dist1squared = (x - A[0][0])**2 + (y - A[0][1])**2;
         var dist2squared = (x - A[1][0])**2 + (y - A[1][1])**2;
@@ -301,12 +309,25 @@ onload = function() {
         else {
             activePoint = 2;
         }
-        canvas.onmousemove = onDrag;
+        
+        canvas.addEventListener("mousemove", onMouseMove);
+        canvas.addEventListener("touchmove", onTouchMove);
+    }
+    
+    function onMouseUp(evt) {
+        canvas.removeEventListener("mousemove", onMouseMove);
+        canvas.removeEventListener("touchmove", onTouchMove);
+    }
+    
+    canvas.addEventListener("mousedown", function (evt) {
+        return onMouseDown(evt.clientX, evt.clientY);
+    });
+    canvas.addEventListener("touchstart", function (evt) {
+        return onMouseDown(evt.touches[0].clientX, evt.touches[0].clientY);
     });
 
-    canvas.addEventListener("mouseup", function(e){
-        canvas.onmousemove = null;
-    });
+    canvas.addEventListener("mouseup", onMouseUp);
+    canvas.addEventListener("touchend", onMouseUp);
 
     
     function resizeCanvas() {
