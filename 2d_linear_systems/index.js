@@ -236,18 +236,20 @@ onload = function() {
                 
                 line["x"] += dxdt*timeResolution*timeScaleFactor;
                 line["y"] += dydt*timeResolution*timeScaleFactor;
+                
+                if (line["x"] < - canvas.width/2 || line["x"] > canvas.width/2 || line["y"] < - canvas.height/2 || line["y"] > canvas.height/2) {
+                    toDelete.push(line);
+                    break;
+                }
+                else if (timestamp - line["start"] > maxTime) {
+                    toDelete.push(line);
+                    break;
+                }
             }
             
             contentctx.lineTo(canvas.width/2 + line["x"], canvas.height/2 + line["y"]);
             contentctx.closePath();
             contentctx.stroke();
-            
-            if (line["x"] < - canvas.width/2 || line["x"] > canvas.width/2 || line["y"] < - canvas.height/2 || line["y"] > canvas.height/2) {
-                toDelete.push(line);
-            }
-            else if (timestamp - line["start"] > maxTime) {
-                toDelete.push(line);
-            }
             
         }
         
