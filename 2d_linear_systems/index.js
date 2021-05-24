@@ -126,13 +126,6 @@ onload = function() {
             fgctx.stroke();
             fgctx.fill();
             
-            fgctx.fillStyle = '#eee';
-            fgctx.font = "30px serif";
-            fgctx.fillText("x",canvas.width - 50, canvas.height/2+30);
-            fgctx.font = "15px serif";
-            fgctx.fillText("1",canvas.width - 32, canvas.height/2+35);
-
-
             fgctx.lineWidth = 1;
             fgctx.strokeStyle = '#aaa';
             fgctx.fillStyle   = '#aaa';
@@ -147,12 +140,6 @@ onload = function() {
             fgctx.closePath();
             fgctx.stroke();
             fgctx.fill();
-            
-            fgctx.fillStyle = '#eee';
-            fgctx.font = "30px serif";
-            fgctx.fillText("x",canvas.width/2 - 40, 30);
-            fgctx.font = "15px serif";
-            fgctx.fillText("2",canvas.width/2 - 22, 35);
         }
         
         // Points
@@ -186,20 +173,11 @@ onload = function() {
             fgctx.fill();
         }
         
-        // Matrix
-        fgctx.fillStyle = '#eee';
-        fgctx.font = "30px serif";
-        fgctx.fillText("A =",canvas.width - 200, 50);
-        fgctx.font = "60px serif";
-        fgctx.fillText("[",canvas.width - 140, 60);
-        fgctx.fillText("]",canvas.width -  35, 60);
-        fgctx.font = "15px serif";
-        fgctx.fillStyle   = point1Color;
-        fgctx.fillText(A[0][0]/spacing,canvas.width - 120, 35);
-        fgctx.fillText(A[0][1]/spacing,canvas.width - 120, 60);
-        fgctx.fillStyle   = point2Color;
-        fgctx.fillText(A[1][0]/spacing,canvas.width - 70, 35);
-        fgctx.fillText(A[1][1]/spacing,canvas.width - 70, 60);
+        for (i = 0; i < 2; i++) {
+            for (j = 0; j < 2; j++) {
+                document.getElementById("A").rows[i].cells[j].innerHTML = (A[j][i]/spacing).toFixed(2);;
+            }
+        }
         
         compose();
     }
