@@ -228,7 +228,7 @@ onload = function() {
             contentctx.beginPath();
             contentctx.moveTo(canvas.width/2 + line["x"], canvas.height/2 + line["y"]);
             
-            var desiredSteps = Math.floor((timestamp - line["start"]) / timeResolution);
+            var desiredSteps = Math.min(Math.floor((timestamp - line["start"]) / timeResolution),line["currentSteps"] + 300.);
             while (line["currentSteps"] < desiredSteps) {
                 line["currentSteps"] += 1;
                 var dxdt = A[0][0]*line["x"] + A[1][0]*line["y"];
