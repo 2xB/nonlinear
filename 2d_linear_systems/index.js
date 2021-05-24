@@ -3,19 +3,20 @@ onload = function() {
     var ctx = canvas.getContext('2d');
     
     canvas.bgcanvas = document.createElement('canvas'); // Backdrop | Grid
-    bgctx = canvas.bgcanvas.getContext('2d');
+    var bgctx = canvas.bgcanvas.getContext('2d');
 
     canvas.contentcanvas = document.createElement('canvas'); // Faded | Lines
-    contentctx = canvas.contentcanvas.getContext('2d');
+    var contentctx = canvas.contentcanvas.getContext('2d');
     
     canvas.fgcanvas = document.createElement('canvas'); // Foreground | Axes, Dots, Annotations
-    fgctx = canvas.fgcanvas.getContext('2d');
+    var fgctx = canvas.fgcanvas.getContext('2d');
     
     canvas.tmpcanvas = document.createElement('canvas');
-    tmpctx = canvas.tmpcanvas.getContext('2d');
+    var tmpctx = canvas.tmpcanvas.getContext('2d');
     
     var spacing = 50;
-    var A = [[spacing,0],[0,spacing]];
+    
+    var A = [[1,0],[0,1]];
     
     var lines = [];
     
@@ -149,8 +150,8 @@ onload = function() {
         {
             var pointSize = 7;
             
-            var x = A[0][0];
-            var y = A[0][1];
+            var x = A[0][0]*spacing;
+            var y = A[0][1]*spacing;
             
             fgctx.beginPath();
             fgctx.lineWidth = 1;
@@ -161,8 +162,8 @@ onload = function() {
             fgctx.fill();
             
             
-            var x = A[1][0];
-            var y = A[1][1];
+            var x = A[1][0]*spacing;
+            var y = A[1][1]*spacing;
             
             fgctx.beginPath();
             fgctx.lineWidth = 1;
@@ -173,9 +174,9 @@ onload = function() {
             fgctx.fill();
         }
         
-        for (i = 0; i < 2; i++) {
-            for (j = 0; j < 2; j++) {
-                document.getElementById("A").rows[i].cells[j].innerHTML = (A[j][i]/spacing).toFixed(2);;
+        for (var i = 0; i < 2; i++) {
+            for (var j = 0; j < 2; j++) {
+                document.getElementById("A").rows[i].cells[j].innerHTML = (A[j][i]).toFixed(2);;
             }
         }
         
@@ -212,8 +213,8 @@ onload = function() {
                 var dxdt = A[0][0]*line["x"] + A[1][0]*line["y"];
                 var dydt = A[0][1]*line["x"] + A[1][1]*line["y"];
                 
-                line["x"] += dxdt*timeResolution*timeScaleFactor;
-                line["y"] += dydt*timeResolution*timeScaleFactor;
+                line["x"] += dxdt*spacing*timeResolution*timeScaleFactor;
+                line["y"] += dydt*spacing*timeResolution*timeScaleFactor;
                 
                 if (line["x"] < - canvas.width/2 || line["x"] > canvas.width/2 || line["y"] < - canvas.height/2 || line["y"] > canvas.height/2) {
                     toDelete.push(line);
@@ -259,12 +260,12 @@ onload = function() {
         var y = -(clientY - canvas.height/2);
         
         if (activePoint == 1) {
-            A[0][0] = x;
-            A[0][1] = y;
+            A[0][0] = x/spacing;
+            A[0][1] = y/spacing;
         }
         else {
-            A[1][0] = x;
-            A[1][1] = y;
+            A[1][0] = x/spacing;
+            A[1][1] = y/spacing;
         }
         draw();
     }
@@ -281,8 +282,8 @@ onload = function() {
         var x = clientX - canvas.width/2;
         var y = -(clientY - canvas.height/2);
         
-        var dist1squared = (x - A[0][0])**2 + (y - A[0][1])**2;
-        var dist2squared = (x - A[1][0])**2 + (y - A[1][1])**2;
+        var dist1squared = (x - A[0][0]*spacing)**2 + (y - A[0][1]*spacing)**2;
+        var dist2squared = (x - A[1][0]*spacing)**2 + (y - A[1][1]*spacing)**2;
         if (dist1squared < dist2squared) {
             activePoint = 1;
         }
