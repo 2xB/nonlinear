@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="utf-8">
+    <title>2D Nonlinear Equations: Van der Pol Oscillator</title>
+    <script src="index.js"></script>
+    <link rel="stylesheet" type="text/css" href="index.css">
+  </head>
+  <body>
+    <header></header>
+    <main>
+        <span id="xlabel"><i>x</i><sub>1</sub></span>
+        <span id="ylabel"><i>x</i><sub>2</sub></span>
+        <div id="info">
+            <span style="font-size: 20px;">
+                <input type="checkbox" id="rescale">
+                <label for="rescale">Rescale x<sub>2</sub> → x<sub>2</sub>/μ</label>
+                
+                <br/>
+                
+                Solving <br>
+            </span>
+            
+            <span id="eq_rescaled" style="font-size: 20px;" hidden>
+                <i>ẋ<sub>1</sub></i> = <i>μ</i>·(x<sub>2</sub> - (x<sub>1</sub><sup>3</sup>/3-x<sub>1</sub>))</i> <br/>
+                <i>ẋ<sub>2</sub></i> = - x<sub>2</sub>/μ</i>
+            </span>
+            
+            <span id="eq_orig" style="font-size: 20px;">
+                <i>ẋ<sub>1</sub></i> = x<sub>2</sub> - <i>μ</i>·(x<sub>1</sub><sup>3</sup>/3-x<sub>1</sub>)</i> <br/>
+                <i>ẋ<sub>2</sub></i> = - x<sub>2</sub></i>
+            </span>
+            
+            <br/><br/>
+            <i>μ</i> =
+            <i id="mu" style="color: #77f">1.00</i>
+        </div>
+        <canvas id="canvas"></canvas>
+        <iframe style="position: fixed; right:10px;bottom:10px;border: 0; width: 400px; height: 42px;" src="https://bandcamp.com/EmbeddedPlayer/album=1865677484/size=small/bgcol=ffffff/linkcol=0687f5/transparent=true/" seamless><a href="https://vincerubinetti.bandcamp.com/album/the-music-of-3blue1brown">The Music of 3Blue1Brown by Vincent Rubinetti</a></iframe>
+    </main>
+    <footer></footer>
+  </body>
+</html>
