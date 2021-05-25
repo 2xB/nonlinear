@@ -222,6 +222,12 @@ onload = function() {
                     toDelete.push(line);
                     break;
                 }
+                else if (mu < 0) {
+                    if (line["x"] < - canvas.width/2 || line["x"] > canvas.width/2 || line["y"] < - canvas.height/2 || line["y"] > canvas.height/2) {
+                        toDelete.push(line);
+                        break;
+                    }
+                }
             }
             
             contentctx.lineTo(canvas.width/2 + line["x"], canvas.height/2 + line["y"]);
