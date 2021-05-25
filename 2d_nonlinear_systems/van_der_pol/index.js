@@ -189,6 +189,10 @@ onload = function() {
         
         var toDelete = [];
         
+        var lienard = document.getElementById("lienard").checked;
+        document.getElementById("lienard_div").hidden = !lienard;
+        document.getElementById("notlienard_div").hidden = lienard;
+        
         var rescaled = document.getElementById("rescale").checked;
         document.getElementById("eq_rescaled").hidden = !rescaled;
         document.getElementById("eq_orig").hidden = rescaled;
@@ -206,15 +210,21 @@ onload = function() {
                 var F = 1/3*x**3-x;
                 var g = x;
                 
-                if (rescaled) {
-                    var dxdt = mu*(y - F);
-                    var dydt = -g/mu;
+                if (lienard) {
+                    if (rescaled) {
+                        var dxdt = mu*(y - F);
+                        var dydt = -g/mu;
+                    }
+                    else {
+                        var dxdt = y - mu*F;
+                        var dydt = -g;
+                    }
                 }
                 else {
-                    var dxdt = y - mu*F;
-                    var dydt = -g;
+                    var dxdt = y;
+                    var dydt = - mu*y*(x**2-1) - x;
                 }
-                
+                    
                 line["x"] += dxdt*spacing**2*timeResolution*timeScaleFactor;
                 line["y"] += dydt*spacing**2*timeResolution*timeScaleFactor;
                 

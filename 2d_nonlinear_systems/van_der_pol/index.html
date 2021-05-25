@@ -13,23 +13,36 @@
         <span id="ylabel"><i>x</i><sub>2</sub></span>
         <div id="info">
             <span style="font-size: 20px;">
-                <input type="checkbox" id="rescale">
-                <label for="rescale">Rescale x<sub>2</sub> → x<sub>2</sub>/μ</label>
+                <input type="checkbox" id="lienard">
+                <label for="lienard">Liénard form</label>
+            </span>
+            <div id="notlienard_div">
+                <span style="font-size: 20px;">
+                    Solving <br>
+                    <i>ẋ<sub>1</sub></i> = x<sub>2</sub></i><br/>
+                    <i>ẋ<sub>2</sub></i> = <i>-μ</i>·x<sub>2</sub>·(x<sub>1</sub><sup>2</sup> - 1) - x<sub>1</sub></i>
+                </span>
+            </div>
+            <div id="lienard_div" hidden>
+                <span style="font-size: 20px;">
+                    <input type="checkbox" id="rescale">
+                    <label for="rescale">Rescale x<sub>2</sub> → x<sub>2</sub>/μ</label>
+                    
+                    <br/>
+                    
+                    Solving <br>
+                </span>
                 
-                <br/>
+                <span id="eq_rescaled" style="font-size: 20px;" hidden>
+                    <i>ẋ<sub>1</sub></i> = <i>μ</i>·(x<sub>2</sub> - (x<sub>1</sub><sup>3</sup>/3-x<sub>1</sub>))</i> <br/>
+                    <i>ẋ<sub>2</sub></i> = - x<sub>2</sub>/μ</i>
+                </span>
                 
-                Solving <br>
-            </span>
-            
-            <span id="eq_rescaled" style="font-size: 20px;" hidden>
-                <i>ẋ<sub>1</sub></i> = <i>μ</i>·(x<sub>2</sub> - (x<sub>1</sub><sup>3</sup>/3-x<sub>1</sub>))</i> <br/>
-                <i>ẋ<sub>2</sub></i> = - x<sub>2</sub>/μ</i>
-            </span>
-            
-            <span id="eq_orig" style="font-size: 20px;">
-                <i>ẋ<sub>1</sub></i> = x<sub>2</sub> - <i>μ</i>·(x<sub>1</sub><sup>3</sup>/3-x<sub>1</sub>)</i> <br/>
-                <i>ẋ<sub>2</sub></i> = - x<sub>2</sub></i>
-            </span>
+                <span id="eq_orig" style="font-size: 20px;">
+                    <i>ẋ<sub>1</sub></i> = x<sub>2</sub> - <i>μ</i>·(x<sub>1</sub><sup>3</sup>/3-x<sub>1</sub>)</i> <br/>
+                    <i>ẋ<sub>2</sub></i> = - x<sub>2</sub></i>
+                </span>
+            </div>
             
             <br/><br/>
             <i>μ</i> =
