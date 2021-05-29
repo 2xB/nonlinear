@@ -66,3 +66,24 @@ canvas {
     padding: 5px;    
     text-align: center;
 }
+
+.music {
+    position: fixed;
+    right:10px;
+    bottom:10px;
+    border: 0;
+    width: 400px;
+    height: 42px;
+}
+
+button.music {
+    background-color: #fff2;
+    border: 2px solid #fff;
+    border-radius: 5px;
+    color: #fff;
+}
+
+button.music:hover {
+    background-color: #fff1;
+    color: #fffc;
+}
