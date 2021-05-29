@@ -66,3 +66,10 @@ canvas {
     padding: 5px;    
     text-align: center;
 }
+
+.matrix input {
+  background-color: #0000;
+  border: 1px solid #fff3;
+  border-radius: 1px;
+  color: #ccc;
+}
