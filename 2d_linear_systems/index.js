@@ -143,6 +143,107 @@ onload = function() {
             fgctx.fill();
         }
         
+        // Eigenvectors
+        
+        document.getElementById("eigen").onclick = draw;
+        if (document.getElementById("eigen").checked) {
+            var a = A[0][0];
+            var b = A[1][0];
+            var c = A[0][1];
+            var d = A[1][1];
+            
+            // https://www.youtube.com/watch?v=e50Bj7jn9IQ
+            var mean = (a+d)/2.;
+            var product = a*d - b*c;
+            
+            if (mean**2-product < 0) {
+                return
+            }
+            
+            var l1 = mean + Math.sqrt(mean**2-product);
+            var l2 = mean - Math.sqrt(mean**2-product);
+            
+            function drawEigenvector (lambda, index) {
+                // http://people.math.harvard.edu/~knill/teaching/math21b2004/exhibits/2dmatrices/index.html
+                if (Math.abs(c) > Math.abs(b) && Math.abs(c) > 0.) {
+                    var x = lambda - d;
+                    var y = c;
+                }
+                else if (Math.abs(b) > 0.) {
+                    var x = b;
+                    var y = lambda - a;
+                }
+                else if (a != d) {
+                    var x = index == 1 ? 1 : 0;
+                    var y = index == 1 ? 0 : 1;
+                }
+                else {
+                    return;
+                }
+                    
+                // Normalize, length = eigenvalue
+                var length = Math.sqrt(x**2+y**2);
+                var x = x / length * lambda;
+                var y = y / length * lambda;
+                
+                fgctx.lineWidth = 4;
+                fgctx.strokeStyle = '#aafd';
+                fgctx.fillStyle   = '#aafd';
+                
+                fgctx.beginPath();
+                fgctx.moveTo(canvas.width/2 - x*spacing, canvas.height/2 - y*spacing);
+                fgctx.lineTo(canvas.width/2 + x*spacing, canvas.height/2 + y*spacing);
+                fgctx.closePath();
+                fgctx.stroke();
+                
+                
+                var tipSize = 0.5;
+                var endSize = 0.1;
+                if (lambda >= 0) {
+                    fgctx.lineWidth = 6;
+                    fgctx.beginPath();
+                    fgctx.moveTo(canvas.width/2 - x*spacing, canvas.height/2 - y*spacing);
+                    fgctx.lineTo(canvas.width/2 - x*spacing*(1-tipSize), canvas.height/2 - y*spacing*(1-tipSize));
+                    fgctx.moveTo(canvas.width/2 + x*spacing, canvas.height/2 + y*spacing);
+                    fgctx.lineTo(canvas.width/2 + x*spacing*(1-tipSize), canvas.height/2 + y*spacing*(1-tipSize));
+                    fgctx.closePath();
+                    fgctx.stroke();
+                    
+                    fgctx.beginPath();
+                    fgctx.lineWidth = 8;
+                    fgctx.moveTo(canvas.width/2 - x*spacing, canvas.height/2 - y*spacing);
+                    fgctx.lineTo(canvas.width/2 - x*spacing*(1-endSize), canvas.height/2 - y*spacing*(1-endSize));
+                    fgctx.moveTo(canvas.width/2 + x*spacing, canvas.height/2 + y*spacing);
+                    fgctx.lineTo(canvas.width/2 + x*spacing*(1-endSize), canvas.height/2 + y*spacing*(1-endSize));
+                    fgctx.closePath();
+                    fgctx.stroke();
+                }
+                else {
+                    fgctx.lineWidth = 6;
+                    fgctx.beginPath();
+                    fgctx.moveTo(canvas.width/2, canvas.height/2);
+                    fgctx.lineTo(canvas.width/2 - x*spacing*tipSize, canvas.height/2 - y*spacing*tipSize);
+                    fgctx.moveTo(canvas.width/2, canvas.height/2);
+                    fgctx.lineTo(canvas.width/2 + x*spacing*tipSize, canvas.height/2 + y*spacing*tipSize);
+                    fgctx.closePath();
+                    fgctx.stroke();
+                    
+                    fgctx.beginPath();
+                    fgctx.lineWidth = 8;
+                    fgctx.beginPath();
+                    fgctx.moveTo(canvas.width/2, canvas.height/2);
+                    fgctx.lineTo(canvas.width/2 - x*spacing*endSize, canvas.height/2 - y*spacing*endSize);
+                    fgctx.moveTo(canvas.width/2, canvas.height/2);
+                    fgctx.lineTo(canvas.width/2 + x*spacing*endSize, canvas.height/2 + y*spacing*endSize);
+                    fgctx.closePath();
+                    fgctx.stroke();
+                }
+            }
+            
+            drawEigenvector(l1, 1);
+            drawEigenvector(l2, 2);
+        }
+        
         // Points
         
         var point1Color = '#77f';
