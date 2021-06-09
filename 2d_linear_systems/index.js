@@ -59,6 +59,48 @@ onload = function() {
         ctx.globalCompositeOperation = "source-over";
         ctx.drawImage(canvas.fgcanvas, 0, 0);
     }
+    
+    
+    function drawArrow (x1, y1, x2, y2, arrowSize, ctx) {
+        // Unit vector in arrow direction
+        var ux = x2 - x1;
+        var uy = y2 - y1;
+        var len = Math.sqrt(ux*ux + uy*uy);
+        ux /= len;
+        uy /= len;
+        
+        var tipPoints = [
+                [
+                    x2*spacing - ux*1.5*arrowSize,
+                    y2*spacing - uy*1.5*arrowSize
+                ],
+                [
+                    x2*spacing - ux*1.5*arrowSize + uy*arrowSize,
+                    y2*spacing - uy*1.5*arrowSize - ux*arrowSize
+                ],
+                [
+                    x2*spacing,
+                    y2*spacing
+                ],
+                [
+                    x2*spacing - ux*1.5*arrowSize - uy*arrowSize,
+                    y2*spacing - uy*1.5*arrowSize + ux*arrowSize
+                ],
+                [
+                    x2*spacing - ux*1.5*arrowSize,
+                    y2*spacing - uy*1.5*arrowSize
+                ]
+            ];
+        ctx.beginPath();
+        ctx.moveTo(canvas.width/2 + x1*spacing, canvas.height/2 - y1*spacing);
+        for (let i in tipPoints) {
+            var point = tipPoints[i];
+            ctx.lineTo(canvas.width/2 + point[0], canvas.height/2 - point[1]);
+        }
+        ctx.closePath();
+        ctx.stroke();
+        ctx.fill();
+    }
 
     function draw() {
 
@@ -66,6 +108,10 @@ onload = function() {
         bgctx.fillRect(0, 0, canvas.width, canvas.height);
         
         fgctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Color definitions
+        var point1Color = '#77f';
+        var point2Color = '#f77';
         
         
         // Grid
@@ -242,10 +288,29 @@ onload = function() {
             }
         }
         
-        // Points
+        // Handle vectors
+        document.getElementById("handle").onclick = draw;
+        if (document.getElementById("handle").checked) {
+            bgctx.lineWidth = 3;
+            bgctx.globalAlpha = 0.6;
+            bgctx.strokeStyle = point1Color;
+            bgctx.fillStyle = point1Color;
+            drawArrow(
+                1, 0, 
+                A[0][0] + 1, A[0][1], 
+                6, bgctx
+            );
+            bgctx.strokeStyle = point2Color;
+            bgctx.fillStyle = point2Color;
+            drawArrow(
+                0, 1, 
+                A[1][0], A[1][1] + 1, 
+                6, bgctx
+            );
+            bgctx.globalAlpha = 1;
+        }
         
-        var point1Color = '#77f';
-        var point2Color = '#f77';
+        // Points
         {
             var pointSize = 7;
             
