@@ -188,8 +188,8 @@ onload = function() {
                     fgctx.fillStyle   = '#aafd';
                     
                     fgctx.beginPath();
-                    fgctx.moveTo(canvas.width/2 - x*spacing, canvas.height/2 - y*spacing);
-                    fgctx.lineTo(canvas.width/2 + x*spacing, canvas.height/2 + y*spacing);
+                    fgctx.moveTo(canvas.width/2 - x*spacing, canvas.height/2 + y*spacing);
+                    fgctx.lineTo(canvas.width/2 + x*spacing, canvas.height/2 - y*spacing);
                     fgctx.closePath();
                     fgctx.stroke();
                     
@@ -199,19 +199,19 @@ onload = function() {
                     if (lambda >= 0) {
                         fgctx.lineWidth = 6;
                         fgctx.beginPath();
-                        fgctx.moveTo(canvas.width/2 - x*spacing, canvas.height/2 - y*spacing);
-                        fgctx.lineTo(canvas.width/2 - x*spacing*(1-tipSize), canvas.height/2 - y*spacing*(1-tipSize));
-                        fgctx.moveTo(canvas.width/2 + x*spacing, canvas.height/2 + y*spacing);
-                        fgctx.lineTo(canvas.width/2 + x*spacing*(1-tipSize), canvas.height/2 + y*spacing*(1-tipSize));
+                        fgctx.moveTo(canvas.width/2 - x*spacing, canvas.height/2 + y*spacing);
+                        fgctx.lineTo(canvas.width/2 - x*spacing*(1-tipSize), canvas.height/2 + y*spacing*(1-tipSize));
+                        fgctx.moveTo(canvas.width/2 + x*spacing, canvas.height/2 - y*spacing);
+                        fgctx.lineTo(canvas.width/2 + x*spacing*(1-tipSize), canvas.height/2 - y*spacing*(1-tipSize));
                         fgctx.closePath();
                         fgctx.stroke();
                         
                         fgctx.beginPath();
                         fgctx.lineWidth = 8;
-                        fgctx.moveTo(canvas.width/2 - x*spacing, canvas.height/2 - y*spacing);
-                        fgctx.lineTo(canvas.width/2 - x*spacing*(1-endSize), canvas.height/2 - y*spacing*(1-endSize));
-                        fgctx.moveTo(canvas.width/2 + x*spacing, canvas.height/2 + y*spacing);
-                        fgctx.lineTo(canvas.width/2 + x*spacing*(1-endSize), canvas.height/2 + y*spacing*(1-endSize));
+                        fgctx.moveTo(canvas.width/2 - x*spacing, canvas.height/2 + y*spacing);
+                        fgctx.lineTo(canvas.width/2 - x*spacing*(1-endSize), canvas.height/2 + y*spacing*(1-endSize));
+                        fgctx.moveTo(canvas.width/2 + x*spacing, canvas.height/2 - y*spacing);
+                        fgctx.lineTo(canvas.width/2 + x*spacing*(1-endSize), canvas.height/2 - y*spacing*(1-endSize));
                         fgctx.closePath();
                         fgctx.stroke();
                     }
@@ -219,9 +219,9 @@ onload = function() {
                         fgctx.lineWidth = 6;
                         fgctx.beginPath();
                         fgctx.moveTo(canvas.width/2, canvas.height/2);
-                        fgctx.lineTo(canvas.width/2 - x*spacing*tipSize, canvas.height/2 - y*spacing*tipSize);
+                        fgctx.lineTo(canvas.width/2 - x*spacing*tipSize, canvas.height/2 + y*spacing*tipSize);
                         fgctx.moveTo(canvas.width/2, canvas.height/2);
-                        fgctx.lineTo(canvas.width/2 + x*spacing*tipSize, canvas.height/2 + y*spacing*tipSize);
+                        fgctx.lineTo(canvas.width/2 + x*spacing*tipSize, canvas.height/2 - y*spacing*tipSize);
                         fgctx.closePath();
                         fgctx.stroke();
                         
@@ -229,9 +229,9 @@ onload = function() {
                         fgctx.lineWidth = 8;
                         fgctx.beginPath();
                         fgctx.moveTo(canvas.width/2, canvas.height/2);
-                        fgctx.lineTo(canvas.width/2 - x*spacing*endSize, canvas.height/2 - y*spacing*endSize);
+                        fgctx.lineTo(canvas.width/2 - x*spacing*endSize, canvas.height/2 + y*spacing*endSize);
                         fgctx.moveTo(canvas.width/2, canvas.height/2);
-                        fgctx.lineTo(canvas.width/2 + x*spacing*endSize, canvas.height/2 + y*spacing*endSize);
+                        fgctx.lineTo(canvas.width/2 + x*spacing*endSize, canvas.height/2 - y*spacing*endSize);
                         fgctx.closePath();
                         fgctx.stroke();
                     }
@@ -329,7 +329,7 @@ onload = function() {
         for (let i in lines) {
             var line = lines[i];
             contentctx.beginPath();
-            contentctx.moveTo(canvas.width/2 + line["x"], canvas.height/2 + line["y"]);
+            contentctx.moveTo(canvas.width/2 + line["x"], canvas.height/2 - line["y"]);
             
             var desiredSteps = Math.min(Math.floor((timestamp - line["start"]) / timeResolution),line["currentSteps"] + 300.);
             while (line["currentSteps"] < desiredSteps) {
@@ -350,7 +350,7 @@ onload = function() {
                 }
             }
             
-            contentctx.lineTo(canvas.width/2 + line["x"], canvas.height/2 + line["y"]);
+            contentctx.lineTo(canvas.width/2 + line["x"], canvas.height/2 - line["y"]);
             contentctx.closePath();
             contentctx.stroke();
             

@@ -200,7 +200,7 @@ onload = function() {
         for (let i in lines) {
             var line = lines[i];
             contentctx.beginPath();
-            contentctx.moveTo(canvas.width/2 + line["x"], canvas.height/2 + line["y"]);
+            contentctx.moveTo(canvas.width/2 + line["x"], canvas.height/2 - line["y"]);
             
             var desiredSteps = Math.min(Math.floor((timestamp - line["start"]) / timeResolution),line["currentSteps"] + 300.);
             while (line["currentSteps"] < desiredSteps) {
@@ -240,7 +240,7 @@ onload = function() {
                 }
             }
             
-            contentctx.lineTo(canvas.width/2 + line["x"], canvas.height/2 + line["y"]);
+            contentctx.lineTo(canvas.width/2 + line["x"], canvas.height/2 - line["y"]);
             contentctx.closePath();
             contentctx.stroke();
             
