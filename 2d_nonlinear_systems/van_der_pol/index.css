@@ -67,6 +67,13 @@ canvas {
     text-align: center;
 }
 
+input {
+  background-color: #0000;
+  border: 1px solid #fff3;
+  border-radius: 1px;
+  color: #ccc;
+}
+
 .music {
     position: fixed;
     right:10px;

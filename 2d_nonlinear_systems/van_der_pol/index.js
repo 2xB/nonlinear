@@ -160,16 +160,28 @@ onload = function() {
             fgctx.fill();
         }
         
-        for (var i = 0; i < 2; i++) {
-            for (var j = 0; j < 2; j++) {
-                document.getElementById("mu").innerHTML = mu.toFixed(2);;
-            }
+        var el = document.getElementById("mu");
+        var val = parseFloat(el.value);
+        
+        if (el.value != mu) {
+            el.value = mu.toFixed(2);
         }
         
         compose();
     }
     
     function step(timestamp) {
+        var el = document.getElementById("mu");
+        var val = parseFloat(el.value);
+            
+        if (isNaN(el.value)) {
+            el.value = mu.toFixed(2);
+        }
+        else if (val != mu) {
+            mu = val;
+            draw();
+        }
+        
         if (lastTime === undefined)
             lastTime = timestamp;
         const elapsed = timestamp - lastTime;
