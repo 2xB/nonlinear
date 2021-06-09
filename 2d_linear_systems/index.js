@@ -288,6 +288,42 @@ onload = function() {
             bgctx.globalAlpha = 1;
         }
         
+        // On-axis vectors
+        document.getElementById("onaxisvectors").onclick = draw;
+        if (document.getElementById("onaxisvectors").checked) {
+            bgctx.lineWidth = 3;
+            bgctx.globalAlpha = 0.6;
+            bgctx.strokeStyle = point1Color;
+            bgctx.fillStyle = point1Color;
+            for (var i = 1; i < canvas.width/2/spacing; i++) {
+                drawArrow(
+                    i, 0, 
+                    A[0][0]*i + i, A[0][1]*i, 
+                    6, bgctx
+                );
+                drawArrow(
+                    -i, 0, 
+                    - (A[0][0]*i + i), - A[0][1]*i, 
+                    6, bgctx
+                );
+            }
+            bgctx.strokeStyle = point2Color;
+            bgctx.fillStyle = point2Color;
+            for (var i = 1; i < canvas.height/2/spacing; i++) {
+                drawArrow(
+                    0, i, 
+                    A[1][0]*i, A[1][1]*i + i, 
+                    6, bgctx
+                );
+                drawArrow(
+                    0, -i, 
+                    - A[1][0]*i, - (A[1][1]*i + i), 
+                    6, bgctx
+                );
+            }
+            bgctx.globalAlpha = 1;
+        }
+        
         // Points
         {
             var pointSize = 7;
