@@ -61,7 +61,7 @@ onload = function() {
     }
     
     
-    function drawArrow (x1, y1, x2, y2, arrowSize, ctx) {
+    function drawArrow(x1, y1, x2, y2, arrowSize, ctx) {
         // Unit vector in arrow direction
         var ux = x2 - x1;
         var uy = y2 - y1;
@@ -229,58 +229,36 @@ onload = function() {
                     var x = x / length * lambda;
                     var y = y / length * lambda;
                     
-                    fgctx.lineWidth = 4;
-                    fgctx.strokeStyle = '#aafd';
-                    fgctx.fillStyle   = '#aafd';
+                    bgctx.lineWidth = 4;
+                    bgctx.strokeStyle = '#aafd';
+                    bgctx.fillStyle   = '#aafd';
+                    bgctx.globalAlpha = 0.7;
                     
-                    fgctx.beginPath();
-                    fgctx.moveTo(canvas.width/2 - x*spacing, canvas.height/2 + y*spacing);
-                    fgctx.lineTo(canvas.width/2 + x*spacing, canvas.height/2 - y*spacing);
-                    fgctx.closePath();
-                    fgctx.stroke();
-                    
-                    
-                    var tipSize = 0.5;
-                    var endSize = 0.1;
                     if (lambda >= 0) {
-                        fgctx.lineWidth = 6;
-                        fgctx.beginPath();
-                        fgctx.moveTo(canvas.width/2 - x*spacing, canvas.height/2 + y*spacing);
-                        fgctx.lineTo(canvas.width/2 - x*spacing*(1-tipSize), canvas.height/2 + y*spacing*(1-tipSize));
-                        fgctx.moveTo(canvas.width/2 + x*spacing, canvas.height/2 - y*spacing);
-                        fgctx.lineTo(canvas.width/2 + x*spacing*(1-tipSize), canvas.height/2 - y*spacing*(1-tipSize));
-                        fgctx.closePath();
-                        fgctx.stroke();
-                        
-                        fgctx.beginPath();
-                        fgctx.lineWidth = 8;
-                        fgctx.moveTo(canvas.width/2 - x*spacing, canvas.height/2 + y*spacing);
-                        fgctx.lineTo(canvas.width/2 - x*spacing*(1-endSize), canvas.height/2 + y*spacing*(1-endSize));
-                        fgctx.moveTo(canvas.width/2 + x*spacing, canvas.height/2 - y*spacing);
-                        fgctx.lineTo(canvas.width/2 + x*spacing*(1-endSize), canvas.height/2 - y*spacing*(1-endSize));
-                        fgctx.closePath();
-                        fgctx.stroke();
+                        drawArrow(
+                            0, 0, 
+                            x, y, 
+                            6, bgctx
+                        );
+                        drawArrow(
+                            0, 0, 
+                            -x, -y, 
+                            6, bgctx
+                        );
                     }
                     else {
-                        fgctx.lineWidth = 6;
-                        fgctx.beginPath();
-                        fgctx.moveTo(canvas.width/2, canvas.height/2);
-                        fgctx.lineTo(canvas.width/2 - x*spacing*tipSize, canvas.height/2 + y*spacing*tipSize);
-                        fgctx.moveTo(canvas.width/2, canvas.height/2);
-                        fgctx.lineTo(canvas.width/2 + x*spacing*tipSize, canvas.height/2 - y*spacing*tipSize);
-                        fgctx.closePath();
-                        fgctx.stroke();
-                        
-                        fgctx.beginPath();
-                        fgctx.lineWidth = 8;
-                        fgctx.beginPath();
-                        fgctx.moveTo(canvas.width/2, canvas.height/2);
-                        fgctx.lineTo(canvas.width/2 - x*spacing*endSize, canvas.height/2 + y*spacing*endSize);
-                        fgctx.moveTo(canvas.width/2, canvas.height/2);
-                        fgctx.lineTo(canvas.width/2 + x*spacing*endSize, canvas.height/2 - y*spacing*endSize);
-                        fgctx.closePath();
-                        fgctx.stroke();
+                        drawArrow(
+                            x, y, 
+                            0, 0, 
+                            6, bgctx
+                        );
+                        drawArrow(
+                            -x, -y, 
+                            0, 0, 
+                            6, bgctx
+                        );
                     }
+                    bgctx.globalAlpha = 1;
                 }
                 
                 drawEigenvector(l1, 1);
