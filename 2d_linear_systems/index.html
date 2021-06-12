@@ -9,8 +9,18 @@
   <body>
     <header></header>
     <main>
-        <span id="xlabel"><i>x</i><sub>1</sub></span>
-        <span id="ylabel"><i>x</i><sub>2</sub></span>
+        <span id="xlabel">
+            <i>x</i><sub>1</sub>
+            <span class="eigenvalue_axislabel">
+                <br/>Re(<i>λ</i>)
+            </span>
+        </span>
+        <span id="ylabel">
+            <i>x</i><sub>2</sub>
+            <span class="eigenvalue_axislabel">
+                <br/>Im(<i>λ</i>)
+            </span>
+        </span>
         <div id="info">
             <span style="font-size: 20px;">
             Solving <i><b>ẋ</b></i>=<i>A·<b>x</b></i>
@@ -36,8 +46,15 @@
                 <label for="eigen">Show eigenvectors*</label>
             </div>
             <div style="font-size: 12px;">
-                *if they are real and <i>A</i> ≠ <b>1</b>·const.<br/><br/>
-                Length: Eigenvalue / Bold parts: Sign <br/><br/>
+                *if they are real and <i>A</i> ≠ <b>1</b>·const.<br/>
+                <b>Length:</b> Eigenvalue / <b>Arrow:</b> Sign <br/><br/>
+            </div>
+            <div style="font-size: 20px;">
+                <input type="checkbox" id="eigenvalues">
+                <label for="eigenvalues">Show eigenvalues*</label>
+            </div>
+            <div style="font-size: 12px;">
+                *if <i>A</i> ≠ <b>1</b>·const.<br/><br/>
             </div>
             <div style="font-size: 20px;">
                 <input type="checkbox" id="handle" checked>

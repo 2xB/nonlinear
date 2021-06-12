@@ -109,9 +109,11 @@ onload = function() {
         
         fgctx.clearRect(0, 0, canvas.width, canvas.height);
         
-        // Color definitions
+        // Style definitions
         var point1Color = '#77f';
         var point2Color = '#f77';
+
+        var pointSize = 7;
         
         
         // Grid
@@ -191,6 +193,15 @@ onload = function() {
         
         // Eigenvectors
         
+        
+        document.getElementById("eigenvalues").onclick = draw;
+        var drawEigenvalues = document.getElementById("eigenvalues").checked;
+        for (let el of document.getElementsByClassName('eigenvalue_axislabel')) {
+            console.log(drawEigenvalues);
+            el.hidden = !drawEigenvalues;
+        }
+
+        
         document.getElementById("eigen").onclick = draw;
         if (document.getElementById("eigen").checked) {
             var a = A[0][0];
@@ -198,71 +209,107 @@ onload = function() {
             var c = A[0][1];
             var d = A[1][1];
             
-            // https://www.youtube.com/watch?v=e50Bj7jn9IQ
-            var mean = (a+d)/2.;
-            var product = a*d - b*c;
-            
-            if (mean**2-product >= 0) {
-                var l1 = mean + Math.sqrt(mean**2-product);
-                var l2 = mean - Math.sqrt(mean**2-product);
+            if (a != 1 || b != 0 || c != 0 || d != 1) {
+                // https://www.youtube.com/watch?v=e50Bj7jn9IQ
+                var mean = (a+d)/2.;
+                var product = a*d - b*c;
                 
-                function drawEigenvector (lambda, index) {
-                    // http://people.math.harvard.edu/~knill/teaching/math21b2004/exhibits/2dmatrices/index.html
-                    if (Math.abs(c) > Math.abs(b) && Math.abs(c) > 0.) {
-                        var x = lambda - d;
-                        var y = c;
-                    }
-                    else if (Math.abs(b) > 0.) {
-                        var x = b;
-                        var y = lambda - a;
-                    }
-                    else if (a != d) {
-                        var x = index == 1 ? 1 : 0;
-                        var y = index == 1 ? 0 : 1;
-                    }
-                    else {
-                        return;
-                    }
+                if (mean**2-product >= 0) {
+                    var l1 = mean + Math.sqrt(mean**2-product);
+                    var l2 = mean - Math.sqrt(mean**2-product);
+                    
+                    function drawEigenvector (lambda, index) {
+                        // http://people.math.harvard.edu/~knill/teaching/math21b2004/exhibits/2dmatrices/index.html
+                        if (Math.abs(c) > Math.abs(b) && Math.abs(c) > 0.) {
+                            var x = lambda - d;
+                            var y = c;
+                        }
+                        else if (Math.abs(b) > 0.) {
+                            var x = b;
+                            var y = lambda - a;
+                        }
+                        else if (a != d) {
+                            var x = index == 1 ? 1 : 0;
+                            var y = index == 1 ? 0 : 1;
+                        }
+                        else {
+                            return;
+                        }
+                            
+                        // Normalize, length = eigenvalue
+                        var length = Math.sqrt(x**2+y**2);
+                        var x = x / length * lambda;
+                        var y = y / length * lambda;
                         
-                    // Normalize, length = eigenvalue
-                    var length = Math.sqrt(x**2+y**2);
-                    var x = x / length * lambda;
-                    var y = y / length * lambda;
-                    
-                    bgctx.lineWidth = 4;
-                    bgctx.strokeStyle = '#aafd';
-                    bgctx.fillStyle   = '#aafd';
-                    bgctx.globalAlpha = 0.7;
-                    
-                    if (lambda >= 0) {
-                        drawArrow(
-                            0, 0, 
-                            x, y, 
-                            6, bgctx
-                        );
-                        drawArrow(
-                            0, 0, 
-                            -x, -y, 
-                            6, bgctx
-                        );
+                        bgctx.lineWidth = 4;
+                        bgctx.strokeStyle = '#aafd';
+                        bgctx.fillStyle   = '#aafd';
+                        bgctx.globalAlpha = 0.7;
+                        
+                        if (lambda >= 0) {
+                            drawArrow(
+                                0, 0, 
+                                x, y, 
+                                6, bgctx
+                            );
+                            drawArrow(
+                                0, 0, 
+                                -x, -y, 
+                                6, bgctx
+                            );
+                        }
+                        else {
+                            drawArrow(
+                                x, y, 
+                                0, 0, 
+                                6, bgctx
+                            );
+                            drawArrow(
+                                -x, -y, 
+                                0, 0, 
+                                6, bgctx
+                            );
+                        }
+                        bgctx.globalAlpha = 1;
                     }
-                    else {
-                        drawArrow(
-                            x, y, 
-                            0, 0, 
-                            6, bgctx
-                        );
-                        drawArrow(
-                            -x, -y, 
-                            0, 0, 
-                            6, bgctx
-                        );
+                    
+                    drawEigenvector(l1, 1);
+                    drawEigenvector(l2, 2);
+                    
+                    if (document.getElementById("eigenvalues").checked) {
+                        fgctx.lineWidth = 4;
+                        fgctx.strokeStyle = '#aafd';
+                        fgctx.fillStyle   = '#aafd';
+                        fgctx.globalAlpha = 0.8;
+                        fgctx.beginPath();
+                        fgctx.arc(l1*spacing+canvas.width/2, canvas.height/2, pointSize, 0, Math.PI * 2, true);
+                        fgctx.closePath();
+                        fgctx.stroke();
+                        fgctx.beginPath();
+                        fgctx.arc(l2*spacing+canvas.width/2, canvas.height/2, pointSize, 0, Math.PI * 2, true);
+                        fgctx.closePath();
+                        fgctx.stroke();
+                        fgctx.globalAlpha = 1;
                     }
-                    bgctx.globalAlpha = 1;
                 }
-                
-                drawEigenvector(l1, 1);
-                drawEigenvector(l2, 2);
+                else if (document.getElementById("eigenvalues").checked) {
+                    var pm_im = Math.sqrt(product-mean**2);
+                    console.log(pm_im);
+                    
+                    fgctx.lineWidth = 4;
+                    fgctx.strokeStyle = '#aafd';
+                    fgctx.fillStyle   = '#aafd';
+                    fgctx.globalAlpha = 0.8;
+                    fgctx.beginPath();
+                    fgctx.arc(mean*spacing+canvas.width/2, - pm_im*spacing + canvas.height/2, pointSize, 0, Math.PI * 2, true);
+                    fgctx.closePath();
+                    fgctx.stroke();
+                    fgctx.beginPath();
+                    fgctx.arc(mean*spacing+canvas.width/2, pm_im*spacing + canvas.height/2, pointSize, 0, Math.PI * 2, true);
+                    fgctx.closePath();
+                    fgctx.stroke();
+                    fgctx.globalAlpha = 1;
+                }
             }
         }
         
@@ -326,8 +373,6 @@ onload = function() {
         
         // Points
         {
-            var pointSize = 7;
-            
             var x = A[0][0]*spacing;
             var y = A[0][1]*spacing;
             

@@ -17,6 +17,7 @@ canvas {
   right: 20px;
   font-size:30px;
   color: #eee;
+  text-align:right;
 }
 
 #ylabel {
@@ -25,6 +26,7 @@ canvas {
   top: 10px;
   font-size:30px;
   color: #eee;
+  text-align:right;
 }
 
 #info {
@@ -93,4 +95,8 @@ button.music {
 button.music:hover {
     background-color: #fff1;
     color: #fffc;
+}
+
+.eigenvalue_axislabel {
+    color: #ccfd;
 }
