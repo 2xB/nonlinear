@@ -187,7 +187,6 @@ onload = function() {
         document.getElementById("eigenvalues").onclick = draw;
         var drawEigenvalues = document.getElementById("eigenvalues").checked;
         for (let el of document.getElementsByClassName('eigenvalue_axislabel')) {
-            console.log(drawEigenvalues);
             el.hidden = !drawEigenvalues;
         }
 
@@ -219,8 +218,9 @@ onload = function() {
                             var y = lambda - a;
                         }
                         else if (a != d) {
-                            var x = index == 1 ? 1 : 0;
-                            var y = index == 1 ? 0 : 1;
+                            lambda = index == 1 ? a : d;
+                            var x = index == 1 ? a : 0;
+                            var y = index == 1 ? 0 : d;
                         }
                         else {
                             return;
@@ -284,7 +284,6 @@ onload = function() {
                 }
                 else if (document.getElementById("eigenvalues").checked) {
                     var pm_im = Math.sqrt(product-mean**2);
-                    console.log(pm_im);
                     
                     fgctx.lineWidth = 4;
                     fgctx.strokeStyle = '#aafd';
