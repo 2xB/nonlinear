@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="utf-8">
+    <title>3D Nonlinear Equations: Lorenz Attractor</title>
+    <script src="index.js"></script>
+    <link rel="stylesheet" type="text/css" href="index.css">
+  </head>
+  <body>
+    <header></header>
+    <main>
+        <div id="info">
+            <div>
+                <span style="font-size: 20px;">
+                    Solving <br> <!-- Symbols: ẋẏż σρβ · -->
+
+                    &emsp;<i>ẋ</i> = <i>σ·y</i> - <i>σ·x</i><br/>
+                    &emsp;<i>ẏ</i> = <i>ρ</i>·<i>x</i> - <i>x·z</i> - <i>y</i><br/>
+                    &emsp;<i>ż</i> = <i>x·y</i> - <i>β·z</i> 
+                </span>
+            </div>
+            
+            <span style="font-size: 20px;">
+                &emsp;<i>σ</i> = <input type="text" id="sigma" value="10.00" size="2" style="color: #77f;font-size:20px;"/>
+                <br/>
+                &emsp;<i>ρ</i> = <input type="text" id="rho" value="28.00" size="2" style="color: #77f;font-size:20px;"/>
+                <br/>
+                &emsp;<i>β</i> = <input type="text" id="beta" value="2.67" size="2" style="color: #77f;font-size:20px;"/>
+                <br/>
+                
+                via the Euler method
+            </span>
+            <div style="font-size: 20px;">
+                &emsp;<input type="checkbox" id="respawn">
+                <label for="respawn">Respawn some points</label>
+                <br/>
+
+                &emsp;<input type="checkbox" id="respawnorigin">
+                <label for="respawnorigin">Respawn around origin</label><br/>
+
+                &emsp;&emsp;<a href="#" id="respawnall">Respawn all</a>
+                <br/>
+            </div>
+            <div style="font-size: 15px;text-align:center;">
+                <a href="../../index.html">&#9666; Overview</a>
+            </div>
+        </div>
+        <canvas id="canvas"></canvas>
+        
+        <button id="twoclickbutton" class="music" type="button" onclick="
+            var el = document.getElementById('playerframe');
+            el.innerHTML = '<iframe class=\'music\' src=\'https://bandcamp.com/EmbeddedPlayer/album=1865677484/size=small/bgcol=ffffff/linkcol=0687f5/transparent=true/\' seamless></iframe>';
+            el.hidden = false;
+            document.getElementById('twoclickbutton').hidden = true;
+            "><b>Load 3Blue1Brown music from Bandcamp</b><br>(Loads external content)</button>
+        <div id="playerframe" hidden></div>
+    </main>
+    <footer></footer>
+  </body>
+</html>

@@ -28,16 +28,6 @@ onload = function() {
 
     let lastTime;
     
-    let stepMod = 0;
-    
-    function xValToPos(x) {
-        return x + canvas.width/2;
-    }
-
-    function yValToPos(y) {
-        return y + canvas.height/2;
-    }
-    
     function compose()  {
         tmpctx.clearRect(0, 0, canvas.width, canvas.height);
         tmpctx.drawImage(canvas.contentcanvas, 0, 0);

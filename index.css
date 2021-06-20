@@ -5,4 +5,11 @@ body {
 
 a {
   color: #ccc;
+  text-decoration: none;
+  background-color: #333;
+}
+
+a:before {
+  content: "> ";
+  text-decoration: underline;
 }

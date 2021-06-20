@@ -1,0 +1,100 @@
+* { margin:0; padding:0; } /* to remove the top and left whitespace */
+
+body {
+  background: #000;
+  color: #ccc;
+
+  width:100%; height:100%;
+}
+
+canvas {
+  display:block;
+}
+
+#xlabel {
+  position: fixed;
+  top: calc(50% + 10px);
+  right: 20px;
+  font-size:30px;
+  color: #eee;
+}
+
+#ylabel {
+  position: fixed;
+  right: calc(50% + 20px);
+  top: 10px;
+  font-size:30px;
+  color: #eee;
+}
+
+#info {
+  position: fixed;
+  right: 20px;
+  top: 10px;
+  font-size:30px;
+  color: #eee;
+  background-color: #0008;
+  padding: 10px;
+}
+
+/* Matrix similar to code by techfoobar and Camilo Terevinto, https://stackoverflow.com/a/11561235/8575607 */
+.matrix {
+    position: relative;
+    display: inline-table;
+    left: 7px;
+    vertical-align: middle;
+    font-size: 15px;
+    margin-right: 12px;
+}
+.matrix:before, .matrix:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    border: 3px solid #fff;
+    width: 6px;
+    height: 100%;
+}
+.matrix:before {
+    left: -6px;
+    border-right: 0px;
+}
+.matrix:after {
+    right: -6px;
+    border-left: 0px;
+}
+.matrix td {
+    padding: 5px;    
+    text-align: center;
+}
+
+input {
+  background-color: #0000;
+  border: 1px solid #fff3;
+  border-radius: 1px;
+  color: #ccc;
+}
+
+.music {
+    position: fixed;
+    right:10px;
+    bottom:10px;
+    border: 0;
+    width: 400px;
+    height: 42px;
+}
+
+button.music {
+    background-color: #fff2;
+    border: 2px solid #fff;
+    border-radius: 5px;
+    color: #fff;
+}
+
+button.music:hover {
+    background-color: #fff1;
+    color: #fffc;
+}
+
+a {
+    color: #ccf;
+}
